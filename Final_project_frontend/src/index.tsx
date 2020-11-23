@@ -6,8 +6,8 @@ import 'bootstrap/dist/css/bootstrap.css'
 
 ReactDOM.render(
     <div>
-        
-      <Table_class />
+      <Table_class />  
+      
         
         
     </div>,

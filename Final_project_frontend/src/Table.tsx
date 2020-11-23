@@ -150,6 +150,7 @@ function Table_Form () {
     temp.A[inp.inp] = val;
     setSchedule(temp);
     Check_constraints(schedule_state.A, val);
+    console.log(schedule_state);
 
   }
 
