@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom'
 import {ListGroup, Container, Input, Row, Table, ListGroupItem, Col, CardBody } from 'reactstrap';
+// import 'rxjs/Rx';
 
 type form_elem = React.ChangeEvent<HTMLInputElement>;
 interface schedule {
@@ -17,13 +18,19 @@ interface schedule {
 interface inpp {
   value: number
 }
-export class Table_class extends React.Component <{}, {schedule_state: schedule, uns: string[]}> {
+
+
+export class Table_class extends React.Component <{}, {schedule_state: schedule, uns: string[], clashMatrix: Map<string, string[]>, courseList: string[]}> {
+    state :{
+      schedule_state: schedule,
+      uns: string[],
+      clashMatrix: Map<string, string[]>,
+      courseList: string[],
+    }
+
     num_rows:number = 30;
     rows = []
-    courseList:string[] = [ 'HS102' , 'HS104', 'HS302', 'HS122', 'HS239', 'CS304', 'HS510', 'CS902', 'CS204' ];
-    constraints = new Map<string, string[]>();
-    vaa = ['HS104', 'HS302'];
-    vab = [ 'HS122'];
+
     temp:schedule;
     vmA: string[] = [];
     vmB: string[] = [];
@@ -33,16 +40,10 @@ export class Table_class extends React.Component <{}, {schedule_state: schedule,
     vmF: string[] = [];
     vmG: string[] = [];
     vmH: string[] = [];
-    state :{
-      schedule_state: schedule,
-      uns: string[]
-    }
 
     constructor(props){
         super(props);
-        
-        this.constraints.set('HS102', this.vaa);
-        this.constraints.set('HS104', this.vab);
+
         for(let i:number = 0;i < this.num_rows; ++i)
         {
             this.vmA.push('');
@@ -55,60 +56,106 @@ export class Table_class extends React.Component <{}, {schedule_state: schedule,
             this.vmH.push('');
         }
         this.temp = {A: this.vmA, B: this.vmB, C: this.vmC , D: this.vmD , E: this.vmE , F: this.vmF , G: this.vmG , H: this.vmH};
+
         this.state = {
             schedule_state: this.temp,
-            uns: []
+            uns: [],
+            clashMatrix: new Map<string, string[]>(),
+            courseList: []
         }
-        console.log('hiiiiii')
-        console.log(this.state.schedule_state);
-        // this.getA = this.getA.bind(this);
+
+        console.log("before");
+
+        let data = this.getClashes();
+        console.log('printing data');
+        console.log(data);
+
+        console.log("after");
+
+        console.log("constructor\n");
+        console.log(this.state.clashMatrix);
+
         this.ObjectRow = this.ObjectRow.bind(this);
+        this.getClashes = this.getClashes.bind(this);
+        this.Give_confilicts = this.Give_confilicts.bind(this);
+        this.Get_Courses_In_Schedule = this.Get_Courses_In_Schedule.bind(this);
         
         for (var i = 0; i < this.num_rows; i++) {
             this.rows.push(<this.ObjectRow value={i}/>); 
           }
     }
+
+    async getClashes() {
+      let url = "/api/endpoint";
+      try{
+        let res = await fetch(url);
+        let ret:Map<string, string[]> = await res.json();
+        console.log("returning clashessssss");
+        console.log(ret);
+        let newMap =  new Map<string, string[]>();
+
+        for(let key in ret) {
+          newMap.set(key, ret[key]);
+        }
+
+        this.setState({clashMatrix : newMap});
+
+        console.log(newMap);
+        console.log(this.state.clashMatrix);
+
+        this.setState({courseList: Array.from(this.state.clashMatrix.keys())});
+
+        console.log("abhi courselist aayegi");
+        console.log(this.state.courseList);
+
+        return ret;
+      }
+      catch (error) {
+        console.log(error);
+      }
+    }
+
     Get_Courses_In_Schedule(): string[]
     {
       let tempry:string[] = []
       for(let i = 0; i < this.num_rows; ++i)
       {
-        if(this.courseList.includes(this.state.schedule_state.A[i]))
+        if(this.state.courseList.includes(this.state.schedule_state.A[i]))
           tempry.push(this.state.schedule_state.A[i]);
       }
       for(let i = 0; i < this.num_rows; ++i)
       {
-        if(this.courseList.includes(this.state.schedule_state.B[i]))
+        if(this.state.courseList.includes(this.state.schedule_state.B[i]))
           tempry.push(this.state.schedule_state.B[i]);
       }
       for(let i = 0; i < this.num_rows; ++i)
       {
-        if(this.courseList.includes(this.state.schedule_state.C[i]))
+        if(this.state.courseList.includes(this.state.schedule_state.C[i]))
           tempry.push(this.state.schedule_state.C[i]);
       }
       for(let i = 0; i < this.num_rows; ++i)
       {
-        if(this.courseList.includes(this.state.schedule_state.D[i]))
+        if(this.state.courseList.includes(this.state.schedule_state.D[i]))
           tempry.push(this.state.schedule_state.D[i]);
       }
       for(let i = 0; i < this.num_rows; ++i)
       {
-        if(this.courseList.includes(this.state.schedule_state.E[i]))
+        if(this.state.courseList.includes(this.state.schedule_state.E[i]))
           tempry.push(this.state.schedule_state.E[i]);
       }
       for(let i = 0; i < this.num_rows; ++i)
       {
-        if(this.courseList.includes(this.state.schedule_state.F[i]))
+        if(this.state.courseList.includes(this.state.schedule_state.F[i]))
           tempry.push(this.state.schedule_state.F[i]);
       }
       for(let i = 0; i < this.num_rows; ++i)
       {
-        if(this.courseList.includes(this.state.schedule_state.G[i]))
+        if(this.state.courseList.includes(this.state.schedule_state.G[i]))
           tempry.push(this.state.schedule_state.G[i]);
       }
       for(let i = 0; i < this.num_rows; ++i)
       {
-        if(this.courseList.includes(this.state.schedule_state.H[i]))
+        if(this.state.courseList.includes(this.state.schedule_state.H[i]))
           tempry.push(this.state.schedule_state.H[i]);
       }
       tempry.sort();
@@ -123,9 +170,10 @@ export class Table_class extends React.Component <{}, {schedule_state: schedule,
         if(SlotValue[j].length < 5)
           continue;
 
-        else if(this.courseList.includes(SlotValue[j]))
+        else if(this.state.courseList.includes(SlotValue[j]))
         {
-          let cons = this.constraints.get(SlotValue[j])
+          let cons = this.state.clashMatrix.get(SlotValue[j]);
+          
           for(let i = 0; i < this.num_rows;++i)
           {
             // console.log(slot[i])
@@ -158,7 +206,7 @@ export class Table_class extends React.Component <{}, {schedule_state: schedule,
     // if(val.length < 5)
     //   return;
     
-    // if(!this.courseList.includes(val))
+    // if(!this.state.courseList.includes(val))
     // {
     //    let er = "The course " + val + " Does not exist";
     //    let tempo = this.state.uns;
@@ -239,7 +287,7 @@ export class Table_class extends React.Component <{}, {schedule_state: schedule,
 
   // isExistInAllList( val:string): boolean
   // {
-  //   if(!this.courseList.includes(val))
+  //   if(!this.state.courseList.includes(val))
   //     return;
 
 

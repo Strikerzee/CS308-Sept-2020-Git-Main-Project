@@ -1,0 +1,2 @@
+FLASK_APP=LAPTimeTableAssist.py
+FLASK_ENV=development
