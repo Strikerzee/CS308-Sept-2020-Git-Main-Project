@@ -36,8 +36,8 @@ with app.test_request_context('/update', method='PUT'):
 @app.route('/', methods=['GET'])
 def home():
     # Data sources
-    sheet_instance_instructors = sheet.get_worksheet(1)
-    sheet_instance_groups = sheet.get_worksheet(2)
+    sheet_instance_instructors = sheet.get_worksheet(2)
+    sheet_instance_groups = sheet.get_worksheet(3)
 
     df_instructors = pd.DataFrame.from_dict(sheet_instance_instructors.get_all_records())
     df_groups = pd.DataFrame.from_dict(sheet_instance_groups.get_all_records())
@@ -91,18 +91,19 @@ def api_all():
 @app.route('/update', methods=['PUT'])
 def api_put():
     slot_count = 8
-    sheet_instance_timetable = sheet.get_worksheet(0)
+    sheet_instance_timetable = sheet.get_worksheet(1)
     m = []
     for i in range(slot_count):
         temp = []
         temp.append(chr(ord('A')+i))
         m.append(temp)
-    # json_data = request.get_json()
-    json_data = {'A':['HS529', 'HS519', 'HS559'], 'B':['CS529', 'CS519', 'CS559'], 'C':[], 'D':[], 'E':[], 'F':[], 'G':[], 'H':[]}
+    json_data = request.get_json()
+    # json_data = {'A':['HS529', 'HS519', 'HS559'], 'B':['CS529', 'CS519', 'CS559'], 'C':[], 'D':[], 'E':[], 'F':[], 'G':[], 'H':[]}
     for i in range(slot_count):
         m[i] = m[i] + json_data[chr(ord('A')+i)]
     print(m)
-    rez = [list(filter(None,i)) for i in zip_longest(*m)]
+    rez = [list(i) for i in zip_longest(*m)]
+    print(rez)
     sheet_instance_timetable.clear()
     sheet_instance_timetable.update('A1:AA50', rez)
     return 'Updated\n'
