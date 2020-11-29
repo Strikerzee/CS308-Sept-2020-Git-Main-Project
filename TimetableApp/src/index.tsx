@@ -7,9 +7,6 @@ import 'bootstrap/dist/css/bootstrap.css'
 ReactDOM.render(
     <div>
       <Table_class />  
-      
-        
-        
     </div>,
     document.querySelector('#root')
 )
