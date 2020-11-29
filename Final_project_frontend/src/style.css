@@ -1,0 +1,84 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.table {
+    border: solid;
+    margin-bottom: 1rem;
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+    border-radius: 5px;
+    border-color: grey;
+}
+
+.thead {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: white;
+    color: solid;
+    font-size: 20px;
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.list-group {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    /* padding-left: 0; */
+    padding: 5px;
+    /* margin-bottom: 0; */
+    border-radius: 0.25rem;
+    /* border-color: grey; */
+    border-style: groove;
+    height: max-content;
+}
+
+#courses {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+  border-radius: 5px;
+  border:solid;
+  border-color: grey;
+}
+
+
+#courses tr:nth-child(odd){
+height: 40px;
+}
+
+#courses tr:nth-child(even){
+height: 40px;
+background-color: #f2f2f2;
+}
+
+
+#courses td:hover {background-color: #ddd;}
+#courses td {
+font-size: 15px;
+text-align: center;
+border: 1px solid #ddd;
+padding: 8px;
+}
+
+#courses th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color:white;
+  color: solid;
+  font-size: 20px;
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.danger {
+color: red;
+}
