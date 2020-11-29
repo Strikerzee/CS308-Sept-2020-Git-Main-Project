@@ -88,6 +88,22 @@ def home():
 def api_all():
     return clashMatrix
 
+@app.route('/fetch', methods=['GET'])
+def api_fetch():
+    slot_count = 8
+    sheet_instance_timetable = sheet.get_worksheet(0)
+    m = sheet_instance_timetable.get_all_records()
+    json_data = {}
+    for i in range(slot_count):
+        json_data[chr(ord('A')+i)] = []
+
+    for x in m:
+        for i in range(slot_count):
+            if x[chr(ord('A')+i)]:
+                json_data[chr(ord('A')+i)].append(x[chr(ord('A')+i)])
+
+    return json_data
+
 @app.route('/update', methods=['PUT'])
 def api_put():
     slot_count = 8
@@ -97,8 +113,8 @@ def api_put():
         temp = []
         temp.append(chr(ord('A')+i))
         m.append(temp)
-    # json_data = request.get_json()
-    json_data = {'A':['HS529', 'HS519', 'HS559'], 'B':['CS529', 'CS519', 'CS559'], 'C':[], 'D':[], 'E':[], 'F':[], 'G':[], 'H':[]}
+    json_data = request.get_json()
+    # json_data = {'A':['HS529', 'HS519', 'HS559'], 'B':['CS529', 'CS519', 'CS559'], 'C':[], 'D':[], 'E':[], 'F':[], 'G':[], 'H':[]}
     for i in range(slot_count):
         m[i] = m[i] + json_data[chr(ord('A')+i)]
     print(m)
